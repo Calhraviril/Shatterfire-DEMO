@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    private Vector3 camAddition = new Vector3 (1.5f, 1.5f, -2.5f);
-    [SerializeField] private Vector3 playerPos;
+    private GameObject cam;
+    [SerializeField] private Vector3 camPos;
+    [SerializeField] private Vector3 aimPos;
+    private Vector3 masterPos;
+
 
     private void Awake()
     {
-
+        cam = GameObject.Find("Main Camera");
     }
     private void Update()
     {
-        playerPos = GameObject.Find("Player").transform.position;
-        gameObject.transform.position = playerPos + camAddition;
-        print(gameObject.transform.position);
+        if (Input.GetKey(KeyCode.Q))
+        {
+            masterPos = aimPos;
+        }
+        else
+        {
+            masterPos = camPos;
+        }
+
+        cam.transform.position = transform.TransformPoint(masterPos);
+        cam.transform.rotation = gameObject.transform.rotation;
     }
 }
