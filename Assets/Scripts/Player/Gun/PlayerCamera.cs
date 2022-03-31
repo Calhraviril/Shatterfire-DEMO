@@ -9,9 +9,6 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private Vector3 aimPos;
     private Vector3 masterPos;
 
-
-
-
     private void Awake()
     {
         locker = GameObject.Find("Handler");

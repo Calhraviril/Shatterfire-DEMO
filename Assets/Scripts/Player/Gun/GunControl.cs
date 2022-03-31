@@ -23,10 +23,13 @@ public class GunControl : MonoBehaviour
         rotX += mouseX * 100 * Time.deltaTime;
         rotY += mouseY * 100 * Time.deltaTime;
 
-        // Additional Settings may be required
+        if (rotY < 80 || rotY > -80)
+        {
+            rotY = Mathf.Clamp(rotY, -80, 80);
+        }
 
         Quaternion localRotation = Quaternion.Euler(rotY, rotX, 0.0f);
-
         transform.rotation = localRotation;
+
     }
 }

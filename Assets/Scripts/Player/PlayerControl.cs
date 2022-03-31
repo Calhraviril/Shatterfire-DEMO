@@ -14,12 +14,6 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private float alterMoveSpeed = 7.5f;
     [SerializeField] private float gravCount;
 
-    //[Header("Jump")]
-    //[SerializeField]
-    //private float jumpSTR = 0.4f;
-    //private float jumpACCS = 0;
-    //private int jumpAmount = 0;
-
     private float horizontal;
     private float vertical;
     private float rotEX;
@@ -57,15 +51,6 @@ public class PlayerControl : MonoBehaviour
     {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
-
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    if (jumpAmount < 2)
-        //    {
-        //        jumpACCS = jumpSTR;
-        //        jumpAmount += 1;
-        //    }
-        //}
     }
 
     private void Move()
@@ -81,7 +66,7 @@ public class PlayerControl : MonoBehaviour
         }
         if (!charon.isGrounded)
         {
-            charon.Move(-transform.up * Time.deltaTime * gravCount);
+            charon.Move(-transform.up * gravCount * (Time.deltaTime * 1.8f));
         }
     }
 }
