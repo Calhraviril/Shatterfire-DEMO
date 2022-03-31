@@ -26,6 +26,7 @@ public class GunControl : MonoBehaviour
         // Additional Settings may be required
 
         Quaternion localRotation = Quaternion.Euler(rotY, rotX, 0.0f);
+
         transform.rotation = localRotation;
     }
 }

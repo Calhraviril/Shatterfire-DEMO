@@ -4,59 +4,46 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+
+    // Muuttujat
+    private CharacterController charon;
+
+    [Header("Movement Values")]
+    [SerializeField] private float forwardMoveSpeed = 7.5f;
+    [SerializeField] private float backMoveSpeed = 3f;
+    [SerializeField] private float alterMoveSpeed = 7.5f;
+    [SerializeField] private float gravCount;
+
+    //[Header("Jump")]
+    //[SerializeField]
+    //private float jumpSTR = 0.4f;
+    //private float jumpACCS = 0;
+    //private int jumpAmount = 0;
+
+    private float horizontal;
+    private float vertical;
     private float rotEX;
-    private float speed;
-    private float alterspeed;
-    void Start()
+
+    void Awake()
     {
+        // Player Control
+        charon = GetComponent<CharacterController>();
+
+        // Origin Rotation setter
         rotEX = transform.localRotation.eulerAngles.x;
+
+        // Cursor Locking to game center
+        Cursor.lockState = CursorLockMode.Locked;
     }
     void Update()
     {
         Rotator();
-        Speeder();
-        Alterspeeder();
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            speed *= 2;
-            alterspeed *= 2;
-        }
-    }
-    private void FixedUpdate()
-    {
-        transform.Translate(alterspeed * Time.deltaTime, 0, speed * Time.deltaTime, Space.Self);
+
+        InputControl();
+
+        Move();
     }
 
-    private void Speeder()
-    {
-        if (Input.GetKey(KeyCode.W))
-        {
-            speed = 10;
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            speed = -10;
-        }
-        else
-        {
-            speed = 0;
-        }
-    }
-    private void Alterspeeder()
-    {
-        if (Input.GetKey(KeyCode.D))
-        {
-            alterspeed = 10;
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            alterspeed = -10;
-        }
-        else
-        {
-            alterspeed = 0;
-        }
-    }
     private void Rotator()
     {
         float mouseX = Input.GetAxis("Mouse X");
@@ -64,5 +51,37 @@ public class PlayerControl : MonoBehaviour
 
         Quaternion localRotation = Quaternion.Euler(0.0f, rotEX, 0.0f);
         transform.rotation = localRotation;
+    }
+
+    private void InputControl()
+    {
+        horizontal = Input.GetAxis("Horizontal");
+        vertical = Input.GetAxis("Vertical");
+
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    if (jumpAmount < 2)
+        //    {
+        //        jumpACCS = jumpSTR;
+        //        jumpAmount += 1;
+        //    }
+        //}
+    }
+
+    private void Move()
+    {
+        if (vertical != 0)
+        {
+            float moveSpeedUsed = (vertical > 0) ? forwardMoveSpeed : backMoveSpeed;
+            charon.Move(transform.forward * moveSpeedUsed * Time.deltaTime * vertical);
+        }
+        if (horizontal != 0)
+        {
+            charon.Move(transform.right * alterMoveSpeed * Time.deltaTime * horizontal);
+        }
+        if (!charon.isGrounded)
+        {
+            charon.Move(-transform.up * Time.deltaTime * gravCount);
+        }
     }
 }
