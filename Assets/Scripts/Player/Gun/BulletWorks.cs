@@ -50,5 +50,4 @@ public class BulletWorks : MonoBehaviour
         yield return awaiten;
         render.enabled = false;
     }
-
 }
