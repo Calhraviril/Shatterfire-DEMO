@@ -7,6 +7,8 @@ public class GunControl : MonoBehaviour
     private float rotX;
     private float rotY;
 
+    public float senX;
+    public float senY;
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -20,8 +22,8 @@ public class GunControl : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = -Input.GetAxis("Mouse Y");
 
-        rotX += mouseX * 100 * Time.deltaTime;
-        rotY += mouseY * 100 * Time.deltaTime;
+        rotX += mouseX * senX * Time.deltaTime;
+        rotY += mouseY * senY * Time.deltaTime;
 
         if (rotY < 80 || rotY > -80)
         {

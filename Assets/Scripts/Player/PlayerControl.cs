@@ -20,12 +20,8 @@ public class PlayerControl : MonoBehaviour
     private float jumpACCS = 0;
     private int jumpAmount = 0;
 
-    [HeaderAttribute("Physics")]
-    [SerializeField] private float gravCount;
-
     private float horizontal;
     private float vertical;
-    private float jumpTime;
     private float rotEX;
 
     void Awake()
@@ -50,8 +46,9 @@ public class PlayerControl : MonoBehaviour
 
     private void Rotator()
     {
+        float cenX = GameObject.Find("Handler").GetComponent<GunControl>().senX;
         float mouseX = Input.GetAxis("Mouse X");
-        rotEX += mouseX * 100 * Time.deltaTime;
+        rotEX += mouseX * cenX * Time.deltaTime;
 
         Quaternion localRotation = Quaternion.Euler(0.0f, rotEX, 0.0f);
         transform.rotation = localRotation;
@@ -61,8 +58,6 @@ public class PlayerControl : MonoBehaviour
     {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
-
-
     }
 
     private void Move()
@@ -97,7 +92,7 @@ public class PlayerControl : MonoBehaviour
         }
         if (jumpACCS > -3.0)
         {
-            jumpACCS = Mathf.MoveTowards(jumpACCS, -3.0f, Time.deltaTime * 2);
+            jumpACCS = Mathf.MoveTowards(jumpACCS, -0.5f, Time.deltaTime * 2);
         }
         if (charon.isGrounded)
         {
