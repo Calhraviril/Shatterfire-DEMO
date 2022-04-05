@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +10,22 @@ public class PlayerControl : MonoBehaviour
     private CharacterController charon;
 
     [Header("Movement Values")]
-    [SerializeField] private float forwardMoveSpeed = 7.5f;
-    [SerializeField] private float backMoveSpeed = 3f;
-    [SerializeField] private float alterMoveSpeed = 7.5f;
+    [SerializeField] private float forwardMoveSpeed;
+    [SerializeField] private float backMoveSpeed;
+    [SerializeField] private float alterMoveSpeed;
+
+    [Header("Jump")]
+    [SerializeField]
+    private float jumpSTR = 0.4f;
+    private float jumpACCS = 0;
+    private int jumpAmount = 0;
+
+    [HeaderAttribute("Physics")]
     [SerializeField] private float gravCount;
 
     private float horizontal;
     private float vertical;
+    private float jumpTime;
     private float rotEX;
 
     void Awake()
@@ -51,6 +61,8 @@ public class PlayerControl : MonoBehaviour
     {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
+
+
     }
 
     private void Move()
@@ -64,9 +76,32 @@ public class PlayerControl : MonoBehaviour
         {
             charon.Move(transform.right * alterMoveSpeed * Time.deltaTime * horizontal);
         }
-        if (!charon.isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            charon.Move(-transform.up * gravCount * (Time.deltaTime * 1.8f));
+            if (jumpAmount < 2)
+            {
+                jumpACCS = jumpSTR;
+                jumpAmount += 1;
+            }
+        }
+        Jumper();
+    }
+
+    private void Jumper()
+    {
+        // Jump
+        if (jumpACCS != 0)
+        {
+            Vector3 jumping = new Vector3(0, jumpACCS, 0);
+            charon.Move(jumping);
+        }
+        if (jumpACCS > -3.0)
+        {
+            jumpACCS = Mathf.MoveTowards(jumpACCS, -3.0f, Time.deltaTime * 2);
+        }
+        if (charon.isGrounded)
+        {
+            jumpAmount = 0;
         }
     }
 }
