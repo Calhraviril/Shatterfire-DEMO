@@ -15,14 +15,20 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private float alterMoveSpeed;
 
     [Header("Jump")]
-    [SerializeField]
-    private float jumpSTR = 0.4f;
+    [SerializeField]private float jumpSTR = 0.4f;    
+    [SerializeField] private float sneakJumpSTR;
+
     private float jumpACCS = 0;
     private int jumpAmount = 0;
+    float timer;
 
-    private float horizontal;
-    private float vertical;
-    private float rotEX;
+    private float horizontal; // Horizontal movement
+    private float vertical; // Vertical movement
+    private float rotEX; // The rotation given to the object
+
+    public bool sneaking; // Activated when sneaking in order to cause special effects
+    private Vector3 uriforward;
+
 
     void Awake()
     {
@@ -42,6 +48,12 @@ public class PlayerControl : MonoBehaviour
         InputControl();
 
         Move();
+
+        if (sneaking = true && timer > Time.time)
+        {
+            Vector3 uniforward = uriforward * Time.deltaTime;
+            charon.Move(uniforward);
+        }
     }
 
     private void Rotator()
@@ -71,21 +83,40 @@ public class PlayerControl : MonoBehaviour
         {
             charon.Move(transform.right * alterMoveSpeed * Time.deltaTime * horizontal);
         }
+        if (Input.GetKey(KeyCode.Q))
+        {
+            sneaking = true;
+            charon.height = 1;
+        }
+        else if (sneaking != true)
+        {
+            sneaking = false;
+            charon.height = 2;
+            timer = 0;
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (jumpAmount < 2)
             {
-                jumpACCS = jumpSTR;
+                if (sneaking != true)
+                {
+                    jumpACCS = jumpSTR;
+                }
+                else if (sneaking)
+                {
+                    timer = Time.time + 1.0f;
+                    uriforward = GameObject.Find("Camera").transform.forward * 10;
+                }
                 jumpAmount += 1;
             }
         }
-        Jumper();
+        Jumper(); // Gravity and the reverse gravity called jumping
     }
 
     private void Jumper()
     {
         // Jump
-        if (jumpACCS != 0)
+        if (jumpACCS != 0 && timer == 0)
         {
             Vector3 jumping = new Vector3(0, jumpACCS, 0);
             charon.Move(jumping);

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    private GameObject locker;
     [SerializeField] private Vector3 camPos;
     [SerializeField] private Vector3 aimPos;
+    [SerializeField] private Vector3 sneakPos;
+
+    private GameObject locker;
     private Vector3 masterPos;
 
     private void Awake()
@@ -15,10 +17,14 @@ public class PlayerCamera : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Mouse1))
         {
             masterPos = aimPos;
             GameObject.Find("PlayerChar").GetComponent<MeshRenderer>().enabled = false;
+        }
+        else if (GameObject.Find("Player").GetComponent<PlayerControl>().sneaking)
+        {
+            masterPos = sneakPos;
         }
         else
         {
