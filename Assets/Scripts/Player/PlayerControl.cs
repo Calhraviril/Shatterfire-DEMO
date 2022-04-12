@@ -104,8 +104,8 @@ public class PlayerControl : MonoBehaviour
                 }
                 else if (sneaking)
                 {
-                    timer = Time.time + 1.0f;
-                    uriforward = GameObject.Find("Camera").transform.forward * 10;
+                    timer = Time.time + 0.5f;
+                    uriforward = GameObject.Find("Camera").transform.forward * 50;
                 }
                 jumpAmount += 1;
             }
