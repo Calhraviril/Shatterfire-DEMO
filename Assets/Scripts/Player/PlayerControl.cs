@@ -74,6 +74,7 @@ public class PlayerControl : MonoBehaviour
 
     private void Move()
     {
+        // Movement
         if (vertical != 0)
         {
             float moveSpeedUsed = (vertical > 0) ? forwardMoveSpeed : backMoveSpeed;
@@ -83,17 +84,29 @@ public class PlayerControl : MonoBehaviour
         {
             charon.Move(transform.right * alterMoveSpeed * Time.deltaTime * horizontal);
         }
+
+        // Sneaking Code
         if (Input.GetKey(KeyCode.Q))
         {
             sneaking = true;
+        }
+        else
+        {
+            sneaking = false;
+        }
+
+        // Sneaking Actions
+        if (sneaking)
+        {
             charon.height = 1;
         }
         else if (sneaking != true)
         {
-            sneaking = false;
             charon.height = 2;
             timer = 0;
         }
+
+        // Jumping Code
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (jumpAmount < 2)
@@ -106,6 +119,7 @@ public class PlayerControl : MonoBehaviour
                 {
                     timer = Time.time + 0.5f;
                     uriforward = GameObject.Find("Camera").transform.forward * 50;
+                    jumpAmount += 99;
                 }
                 jumpAmount += 1;
             }
