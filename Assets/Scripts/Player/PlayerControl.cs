@@ -103,7 +103,6 @@ public class PlayerControl : MonoBehaviour
         else if (sneaking != true)
         {
             charon.height = 2;
-            timer = 0;
         }
 
         // Jumping Code
@@ -126,11 +125,10 @@ public class PlayerControl : MonoBehaviour
         }
         Jumper(); // Gravity and the reverse gravity called jumping
     }
-
     private void Jumper()
     {
         // Jump
-        if (jumpACCS != 0 && timer == 0)
+        if (jumpACCS != 0 && timer < Time.time)
         {
             Vector3 jumping = new Vector3(0, jumpACCS, 0);
             charon.Move(jumping);

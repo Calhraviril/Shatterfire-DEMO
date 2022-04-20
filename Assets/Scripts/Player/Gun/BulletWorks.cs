@@ -35,7 +35,11 @@ public class BulletWorks : MonoBehaviour
             if (Physics.Raycast(aimed, cam.transform.forward, out hit, range))
             {
                 render.SetPosition(1, hit.point);
-                // damaging effects here, once such things can have any effect
+                FoeLife hitLife = hit.collider.GetComponent<FoeLife>();
+                if (hitLife != null)
+                {
+                    hitLife.Damager(1);
+                }
             }
             else
             {
