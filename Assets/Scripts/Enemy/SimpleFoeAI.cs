@@ -36,4 +36,14 @@ public class SimpleFoeAI : MonoBehaviour
             rigi.velocity = Vector3.zero;
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        PlayerMage magus = collision.gameObject.GetComponent<PlayerMage>();
+        if (magus != null)
+        {
+            magus.PlayerDamager(1);
+            rigi.AddForce(Vector3.back * 10, ForceMode.Impulse);
+        }
+    }
 }

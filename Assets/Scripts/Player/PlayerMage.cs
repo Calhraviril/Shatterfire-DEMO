@@ -15,9 +15,9 @@ public class PlayerMage : MonoBehaviour
     [SerializeField] private Image statBarLife;
     [SerializeField] private float lerpSpeed;
 
-    private int current_hp; // When zero, the player dies
-    private int current_ap; // When zero, no jumping or running is allowed
-    private int current_mp; // When zero, no abilities are available
+    private float current_hp; // When zero, the player dies
+    private float current_ap; // When zero, no jumping or running is allowed
+    private float current_mp; // When zero, no abilities are available
 
     private void Start()
     {
@@ -31,6 +31,11 @@ public class PlayerMage : MonoBehaviour
         if (current_hp != statBarLife.fillAmount)
         {
             statBarLife.fillAmount = Mathf.Lerp(statBarLife.fillAmount, current_hp / max_hp, Time.deltaTime * lerpSpeed);
+        }
+        if (current_hp == 0)
+        {
+            // Add game end stuff here
+            statBarLife.fillAmount = 0;
         }
     }
 
