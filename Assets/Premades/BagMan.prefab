@@ -716,6 +716,7 @@ MonoBehaviour:
   maxLife: 10
   defence: 0
   LBar: {fileID: 901489639167134279}
+  LText: {fileID: 2279003404991772088}
   lerpSpeed: 1
 --- !u!1 &6691890126537848797
 GameObject:

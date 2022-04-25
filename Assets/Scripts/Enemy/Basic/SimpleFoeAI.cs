@@ -15,7 +15,7 @@ public class SimpleFoeAI : MonoBehaviour
     private void Start()
     {
         selfPST = gameObject.transform;
-        targetPST = GameObject.Find("Targeted").transform;
+        targetPST = gameObject.transform.Find("Targeted").transform;
         rigi = gameObject.GetComponent<Rigidbody>();
     }
 

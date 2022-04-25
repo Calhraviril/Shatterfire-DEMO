@@ -12,9 +12,11 @@ public class FoeLife : MonoBehaviour
 
     [Header("Statistic")]
     [SerializeField] private Image LBar;
+    [SerializeField] private TMP_Text LText;
     [SerializeField] private float lerpSpeed;
 
     private float curLife;
+    public bool immune;
 
     private void Start()
     {
@@ -25,6 +27,7 @@ public class FoeLife : MonoBehaviour
         if (curLife != LBar.fillAmount)
         {
             LBar.fillAmount = Mathf.Lerp(LBar.fillAmount, curLife / maxLife, Time.deltaTime * lerpSpeed);
+            LText.text = curLife + " / " + maxLife;
         }
         if (curLife == 0)
         {
