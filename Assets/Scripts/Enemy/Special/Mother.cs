@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Mother : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    // This script is used to detect whether or not mother has been given her cake, NOW
+    // Also used to give Mother her special attack
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Spawnables")]
+    [SerializeField] private GameObject easiest;
+
+    [Header("Other")]
+    [SerializeField] private float spawnRate;
+    [SerializeField] private GameObject kilject;
+
+
 }
