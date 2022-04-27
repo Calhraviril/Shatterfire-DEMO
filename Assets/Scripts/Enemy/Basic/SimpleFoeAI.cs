@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,9 +23,7 @@ public class SimpleFoeAI : MonoBehaviour
     private void Update()
     {
         float step = speed * Time.deltaTime;
-        //Vector3 walke = new Vector3(selfPST.position.x, 0, selfPST.position.z);
-        //Vector3 walky = new Vector3(targetPST.position.x, 0, targetPST.position.z);
-        gameObject.transform.LookAt(GameObject.Find("Player").transform);
+        gameObject.transform.LookAt(GameObject.Find("Player").transform.position);
 
         if (rigi.velocity.x < maxSpeed || rigi.velocity.y < maxSpeed || rigi.velocity.z < maxSpeed)
         {

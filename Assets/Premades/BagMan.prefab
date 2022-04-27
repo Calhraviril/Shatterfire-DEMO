@@ -671,6 +671,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.05
   maxSpeed: 10
+  x: 1
+  y: 0
+  z: 1
 --- !u!54 &6691890125125415178
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -718,6 +721,7 @@ MonoBehaviour:
   LBar: {fileID: 901489639167134279}
   LText: {fileID: 2279003404991772088}
   lerpSpeed: 1
+  immune: 0
 --- !u!1 &6691890126537848797
 GameObject:
   m_ObjectHideFlags: 0
