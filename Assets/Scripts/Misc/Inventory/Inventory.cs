@@ -11,9 +11,9 @@ public class Inventory : MonoBehaviour
         if (other.CompareTag("Item"))
         {
             bool duplicated = false;
-            foreach(Item item in itemInver)
+            Item order = other.gameObject.GetComponent<Item>();
+            foreach (Item item in itemInver)
             {
-                Item order = other.gameObject.GetComponent<Item>();
                 if (order.namer == item.namer)
                 {
                     item.amount += order.amount;
@@ -23,7 +23,8 @@ public class Inventory : MonoBehaviour
             }
             if (!duplicated)
             {
-                itemInver.Add(other.GetComponent<Item>());
+                itemInver.Add(order);
+                print("First added " + order.namer + ", with the amount of " + order.amount);
             }
             Destroy(other.gameObject);
             

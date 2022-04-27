@@ -12,7 +12,38 @@ public class Mother : MonoBehaviour
 
     [Header("Other")]
     [SerializeField] private float spawnRate;
-    [SerializeField] private GameObject kilject;
+    [SerializeField] private int maxSpawn;
+    [SerializeField] private int spawnedPerWave;
+    [SerializeField] private int burstSpawnWave;
+    private float timer;
+    private int spawned;
 
+    private void Start()
+    {
+        timer = spawnRate + Time.time;
+    }
+    private void Update()
+    {
+        if (Time.time > timer && spawned < maxSpawn)
+        {
+            Spawner(spawnedPerWave);
+            spawned += spawnedPerWave;
+            timer = Time.time + spawnRate;
+        }
+    }
 
+    private Vector3 RandPos()
+    {
+        float xRand = Random.Range(-2, 2) + transform.position.x;
+        float zRand = Random.Range(-2, 2) + transform.position.z;
+        Vector3 finPos = new Vector3(xRand, transform.position.y, zRand);
+        return finPos;
+    }
+    private void Spawner(int toSpawn)
+    {
+        for (int i = 0; i < toSpawn; i++)
+        {
+            Instantiate(easiest, RandPos(), easiest.transform.rotation);
+        }
+    }
 }

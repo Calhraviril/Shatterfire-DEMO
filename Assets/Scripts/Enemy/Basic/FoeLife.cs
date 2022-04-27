@@ -21,6 +21,7 @@ public class FoeLife : MonoBehaviour
     private void Start()
     {
         curLife = maxLife;
+        immune = false;
     }
     private void Update()
     {
@@ -36,6 +37,10 @@ public class FoeLife : MonoBehaviour
     }
     public void Damager(int dmg)
     {
-        curLife -= (dmg - defence);
+        if (!immune)
+        {
+            curLife -= (dmg - defence);
+        }
+
     }
 }
