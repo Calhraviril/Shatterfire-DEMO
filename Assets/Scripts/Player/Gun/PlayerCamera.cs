@@ -22,7 +22,7 @@ public class PlayerCamera : MonoBehaviour
             masterPos = aimPos;
             GameObject.Find("PlayerChar").GetComponent<MeshRenderer>().enabled = false;
         }
-        else if (GameObject.Find("Player").GetComponent<PlayerControl>().sneaking)
+        else if (GameObject.Find("Player").GetComponent<CharacterController>().height != 2)
         {
             masterPos = sneakPos;
         }

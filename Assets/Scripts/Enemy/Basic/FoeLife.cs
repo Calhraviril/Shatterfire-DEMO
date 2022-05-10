@@ -14,14 +14,13 @@ public class FoeLife : MonoBehaviour
     [SerializeField] private Image LBar;
     [SerializeField] private TMP_Text LText;
     [SerializeField] private float lerpSpeed;
-
+    
     private float curLife;
     public bool immune;
 
     private void Start()
     {
         curLife = maxLife;
-        immune = false;
     }
     private void Update()
     {

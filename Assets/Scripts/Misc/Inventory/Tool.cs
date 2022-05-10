@@ -10,4 +10,7 @@ public class Tool : MonoBehaviour
     public float firerate;
     public float reloadSpeed;
     public float range;
+    public float recoil;
+    public float accuracy;
+    public float multishot;
 }

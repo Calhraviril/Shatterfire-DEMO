@@ -21,6 +21,7 @@ public class Mother : MonoBehaviour
     private void Start()
     {
         timer = spawnRate + Time.time;
+        Spawner(burstSpawnWave);
     }
     private void Update()
     {

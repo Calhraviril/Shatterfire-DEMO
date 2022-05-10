@@ -16,7 +16,6 @@ public class PlayerControl : MonoBehaviour
 
     [Header("Jump")]
     [SerializeField]private float jumpSTR = 0.4f;    
-    [SerializeField] private float sneakJumpSTR;
 
     private float jumpACCS = 0;
     private int jumpAmount = 0;
@@ -25,9 +24,6 @@ public class PlayerControl : MonoBehaviour
     private float horizontal; // Horizontal movement
     private float vertical; // Vertical movement
     private float rotEX; // The rotation given to the object
-
-    public bool sneaking; // Activated when sneaking in order to cause special effects
-    private Vector3 uriforward;
 
 
     void Awake()
@@ -48,12 +44,6 @@ public class PlayerControl : MonoBehaviour
         InputControl();
 
         Move();
-
-        if (sneaking = true && timer > Time.time)
-        {
-            Vector3 uniforward = uriforward * Time.deltaTime;
-            charon.Move(uniforward);
-        }
     }
 
     private void Rotator()
@@ -88,19 +78,9 @@ public class PlayerControl : MonoBehaviour
         // Sneaking Code
         if (Input.GetKey(KeyCode.Q))
         {
-            sneaking = true;
-        }
-        else
-        {
-            sneaking = false;
-        }
-
-        // Sneaking Actions
-        if (sneaking)
-        {
             charon.height = 1;
         }
-        else if (sneaking != true)
+        else if (charon.height != 2)
         {
             charon.height = 2;
         }
@@ -110,16 +90,7 @@ public class PlayerControl : MonoBehaviour
         {
             if (jumpAmount < 2)
             {
-                if (sneaking != true)
-                {
-                    jumpACCS = jumpSTR;
-                }
-                else if (sneaking)
-                {
-                    timer = Time.time + 0.5f;
-                    uriforward = GameObject.Find("Camera").transform.forward * 50;
-                    jumpAmount += 99;
-                }
+                jumpACCS = jumpSTR;
                 jumpAmount += 1;
             }
         }
@@ -132,14 +103,15 @@ public class PlayerControl : MonoBehaviour
         {
             Vector3 jumping = new Vector3(0, jumpACCS, 0);
             charon.Move(jumping);
+        }        
+        if (charon.isGrounded)
+        {
+            jumpAmount = 0;
         }
         if (jumpACCS > -3.0)
         {
             jumpACCS = Mathf.MoveTowards(jumpACCS, -0.5f, Time.deltaTime * 2);
         }
-        if (charon.isGrounded)
-        {
-            jumpAmount = 0;
-        }
+
     }
 }

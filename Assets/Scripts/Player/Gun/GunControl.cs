@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class GunControl : MonoBehaviour
 {
-    private float rotX;
-    private float rotY;
+    public float rotX;
+    public float rotY;
 
     public float senX;
     public float senY;
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         Vector3 rot = transform.localRotation.eulerAngles;
         rotX = rot.x;
         rotY = rot.y;
@@ -29,9 +28,7 @@ public class GunControl : MonoBehaviour
         {
             rotY = Mathf.Clamp(rotY, -80, 80);
         }
-
         Quaternion localRotation = Quaternion.Euler(rotY, rotX, 0.0f);
         transform.rotation = localRotation;
-
     }
 }

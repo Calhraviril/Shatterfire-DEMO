@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public List<Component> itemInver = new List<Component>();
-    public List<Component> toolInver = new List<Component>();
+    public List<Item> itemInver = new List<Item>();
+    public List<Tool> toolInver = new List<Tool>();
+    // Currently hoped weapons : Null(Empty handed), Blaster, Shotgun
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Item"))
@@ -32,6 +33,10 @@ public class Inventory : MonoBehaviour
         if (other.CompareTag("Tool"))
         {
             toolInver.Add(other.GetComponent<Tool>());
+            if (toolInver.Count == 1)
+            {
+                GameObject.Find("Hellfire").GetComponent<BulletWorks>().ChangeTool(toolInver[0]);
+            }
         }
     }
 }
