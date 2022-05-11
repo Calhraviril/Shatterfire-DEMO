@@ -575,7 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f88a8cfc37f4249449465fd762477ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxLife: 1
+  maxLife: 2
   defence: 0
   LBar: {fileID: 280040732546650665}
   LText: {fileID: 1207244084555902422}

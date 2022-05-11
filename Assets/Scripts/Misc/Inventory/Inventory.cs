@@ -6,7 +6,12 @@ public class Inventory : MonoBehaviour
 {
     public List<Item> itemInver = new List<Item>();
     public List<Tool> toolInver = new List<Tool>();
+    BulletWorks weapon;
     // Currently hoped weapons : Null(Empty handed), Blaster, Shotgun
+    private void Start()
+    {
+        weapon = GameObject.Find("HellFire").GetComponent<BulletWorks>();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Item"))
@@ -33,9 +38,11 @@ public class Inventory : MonoBehaviour
         if (other.CompareTag("Tool"))
         {
             toolInver.Add(other.GetComponent<Tool>());
-            if (toolInver.Count == 1)
+            if (weapon.activated == false)
             {
-                GameObject.Find("Hellfire").GetComponent<BulletWorks>().ChangeTool(toolInver[0]);
+                weapon.ChangeTool(toolInver[0]);
+                weapon.activated = true;
+                print("Active weapon");
             }
         }
     }

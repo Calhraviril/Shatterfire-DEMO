@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class FoeLife : MonoBehaviour
 {
     [Header("Values")]
-    [SerializeField] private int maxLife;
+    [SerializeField] private float maxLife;
     [SerializeField] private int defence;
 
     [Header("Statistic")]
@@ -29,7 +29,7 @@ public class FoeLife : MonoBehaviour
             LBar.fillAmount = Mathf.Lerp(LBar.fillAmount, curLife / maxLife, Time.deltaTime * lerpSpeed);
             LText.text = curLife + " / " + maxLife;
         }
-        if (curLife == 0)
+        if (curLife <= 0)
         {
             Destroy(gameObject);
         }

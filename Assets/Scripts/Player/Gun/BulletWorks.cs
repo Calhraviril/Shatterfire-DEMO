@@ -11,32 +11,40 @@ public class BulletWorks : MonoBehaviour
     [SerializeField] private float reloadSpeed;
     [SerializeField] private float range;
     [SerializeField] private float recoil;
-    [SerializeField] private float accuracy; // Must be 0 - 0.5f
+    [SerializeField] private float accuracy;
     [SerializeField] private float multishot;
 
-    [Header("Statistics")]
+    [Header("Misc")]
     [SerializeField] private TMP_Text ammoCount;
+    [SerializeField] private GameObject bullet;
 
-    private Transform shotSpot;
-    private Camera cam;
-    private LineRenderer render;
+    private Transform shotSpot; // Point where shots come from
+    private Camera cam; // The main camera
+    private LineRenderer render; // The renderer of hitscan bullets
 
-    private int curAmmo;
-    private bool reloading;
+    private int curAmmo; // Current bullets of the magazine
+    private bool reloading; // Activated during a reload
 
-    private WaitForSeconds awaiten = new WaitForSeconds(0.3f);
+    // Misc stuff
+    public bool activated;
+    private WaitForSeconds awaiten = new WaitForSeconds(/*0.3f*/99);
 
     private float nextFire;
-    private float shotSpotter()
+    private Vector3 shotSpotter()
     {
-        float ranger = Random.Range(accuracy, -accuracy);
-        return ranger;
+        Vector3 aruk = cam.transform.forward;
+        float arkuX = Random.Range(aruk.x + accuracy, aruk.x - accuracy);
+        float arkuY = Random.Range(aruk.y + accuracy, aruk.y - accuracy);
+        float arkuZ = Random.Range(aruk.z + accuracy, aruk.z - accuracy);
+        Vector3 shotMaster = new Vector3(arkuX, arkuY, arkuZ);
+        return shotMaster;
     }
     private void Start()
     {
         shotSpot = GameObject.Find("ShootPoint").transform;
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         render = gameObject.GetComponent<LineRenderer>();
+        activated = false;
 
         curAmmo = maxAmmo;
         ammoCount.text = curAmmo + " / " + maxAmmo;
@@ -51,14 +59,13 @@ public class BulletWorks : MonoBehaviour
             curAmmo -= 1;
             for (int i = 0; i < multishot; i++) // Activates by the amount of Multishot
             {
-                Vector3 aimed = cam.ViewportToWorldPoint(new Vector3(shotSpotter(), shotSpotter(), 0.0f)); // This may be usable to manifest accuracy
+                Vector3 aimed = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
                 RaycastHit hit;
-
-                render.SetPosition(0, shotSpot.position);
-                StartCoroutine(flareGone());
-                if (Physics.Raycast(aimed, cam.transform.forward, out hit, range))
+                print("Shot");
+                if (Physics.Raycast(aimed, shotSpotter(), out hit, range))
                 {
-                    render.SetPosition(1, hit.point);
+                    Instantiate(bullet, shotSpot.position, Quaternion.LookRotation(shotSpotter()));
+                    print(hit.point);
                     FoeLife hitLife = hit.collider.GetComponent<FoeLife>();
                     if (hitLife != null)
                     {
@@ -67,6 +74,7 @@ public class BulletWorks : MonoBehaviour
                 }
                 else
                 {
+                    Instantiate(bullet, shotSpot.position, Quaternion.LookRotation(shotSpotter()));
                     render.SetPosition(1, aimed + (cam.transform.forward * range));
                 }
             }
@@ -91,15 +99,22 @@ public class BulletWorks : MonoBehaviour
         reloading = false;
     }
 
-    private IEnumerator flareGone()
-    {
-        render.enabled = true;
-        yield return awaiten;
-        render.enabled = false;
-    }
+    //private IEnumerator flareGone()
+    //{
+    //    render.enabled = true;
+    //    yield return awaiten;
+    //    render.enabled = false;
+    //}
 
     public void ChangeTool(Tool equipped)
     {
-
+        dmg = equipped.dmg;
+        maxAmmo = equipped.maxAmmo;
+        firerate = equipped.firerate;
+        reloadSpeed = equipped.reloadSpeed;
+        range = equipped.range;
+        recoil = equipped.recoil;
+        accuracy = equipped.accuracy;
+        multishot = equipped.multishot;
     }
 }
