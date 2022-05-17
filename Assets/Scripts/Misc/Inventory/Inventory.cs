@@ -7,10 +7,39 @@ public class Inventory : MonoBehaviour
     public List<Item> itemInver = new List<Item>();
     public List<Tool> toolInver = new List<Tool>();
     BulletWorks weapon;
-    // Currently hoped weapons : Null(Empty handed), Blaster, Shotgun
+
+    private static Inventory inventory;
+    [SerializeField] private string[] weapons;    
+    public string[] Weapons { get => weapons; }
+
+    public string[] weaponry()
+    {
+        string[] weapons = new string[toolInver.Count];
+        int counter = 0;
+        foreach(Tool tool in toolInver)
+        {
+            weapons[counter] = tool.namer;
+            counter += 1;
+        }
+        return weapons;
+    }
+
+    private void Awake()
+    {
+        inventory = this;
+        weapon = GameObject.Find("HellFire").GetComponent<BulletWorks>();
+
+    }
     private void Start()
     {
-        weapon = GameObject.Find("HellFire").GetComponent<BulletWorks>();
+        LoadPlayerData();
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SavePlayerToJSON();
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -32,7 +61,7 @@ public class Inventory : MonoBehaviour
                 itemInver.Add(order);
                 print("First added " + order.namer + ", with the amount of " + order.amount);
             }
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             
         }
         if (other.CompareTag("Tool"))
@@ -44,6 +73,35 @@ public class Inventory : MonoBehaviour
                 weapon.activated = true;
                 print("Active weapon");
             }
+            Destroy(other.gameObject);
+        }
+    }
+    public void SavePlayerToJSON()
+    {
+        print("Saving...");
+        DataMage.SaveInventoryDataJSON(this);
+    }
+    private void LoadPlayerData()
+    {
+        // Preparations
+        PlayerData loadedData = DataMage.LoadInventoryDataFromJSON();
+        GameObject player = GameObject.Find("Player");
+
+        // Position
+        player.transform.position = new Vector3(loadedData.position[0], loadedData.position[1], loadedData.position[2]);
+
+        // Life
+        int curLife = 10 - (int)loadedData.life;
+        player.GetComponent<PlayerMage>().PlayerDamager(curLife);
+
+        // Tools
+        foreach(string wepon in loadedData.weapons)
+        {
+            GameObject chosenWepon = GameObject.Find(wepon);
+            toolInver.Add(chosenWepon.GetComponent<Tool>());
+            chosenWepon.SetActive(false);
+            weapon.ChangeTool(toolInver[0]);
+            weapon.activated = true;
         }
     }
 }

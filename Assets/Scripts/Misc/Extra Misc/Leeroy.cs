@@ -9,4 +9,11 @@ public class Leeroy : MonoBehaviour
     {
         transform.position += transform.forward * speed;
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Wall"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }

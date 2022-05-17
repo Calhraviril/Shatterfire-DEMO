@@ -22,6 +22,7 @@ public class PlayerMage : MonoBehaviour
     private float current_ap; // When zero, no jumping or running is allowed
     private float current_mp; // When zero, no abilities are available
     private float framesafe; // Used to store the value of how long immunity frames are still active
+    public float HP { get => current_hp; }
 
     private void Start()
     {

@@ -5,7 +5,7 @@ using TMPro;
 public class BulletWorks : MonoBehaviour
 {
     [Header("Stats")]
-    [SerializeField] private int dmg;
+    public int dmg;
     [SerializeField] private int maxAmmo;
     [SerializeField] private float firerate;
     [SerializeField] private float reloadSpeed;
@@ -16,17 +16,20 @@ public class BulletWorks : MonoBehaviour
 
     [Header("Misc")]
     [SerializeField] private TMP_Text ammoCount;
+    [SerializeField] private TMP_Text gunName;
     [SerializeField] private GameObject bullet;
 
     private Transform shotSpot; // Point where shots come from
     private Camera cam; // The main camera
     private LineRenderer render; // The renderer of hitscan bullets
-
-    private int curAmmo; // Current bullets of the magazine
-    private bool reloading; // Activated during a reload
+    private Inventory invent; // The system used to store items and tools
 
     // Misc stuff
-    public bool activated;
+    private int curAmmo; // Current bullets of the magazine
+    private bool reloading; // Activated during a reload
+    public bool activated; // If a weapon is in use
+    private int toolCount; // The amount of weapons held
+    private int activeSpot; // Which weapon is active
     private WaitForSeconds awaiten = new WaitForSeconds(/*0.3f*/99);
 
     private float nextFire;
@@ -37,15 +40,20 @@ public class BulletWorks : MonoBehaviour
         float arkuY = Random.Range(aruk.y + accuracy, aruk.y - accuracy);
         float arkuZ = Random.Range(aruk.z + accuracy, aruk.z - accuracy);
         Vector3 shotMaster = new Vector3(arkuX, arkuY, arkuZ);
+        otherSpotter = shotMaster;
         return shotMaster;
+    }
+    private Vector3 otherSpotter;
+    private void Awake()
+    {
+        invent = GameObject.Find("Player").GetComponent<Inventory>();
     }
     private void Start()
     {
         shotSpot = GameObject.Find("ShootPoint").transform;
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         render = gameObject.GetComponent<LineRenderer>();
-        activated = false;
-
+        activated = false;        
         curAmmo = maxAmmo;
         ammoCount.text = curAmmo + " / " + maxAmmo;
     }
@@ -64,7 +72,7 @@ public class BulletWorks : MonoBehaviour
                 print("Shot");
                 if (Physics.Raycast(aimed, shotSpotter(), out hit, range))
                 {
-                    Instantiate(bullet, shotSpot.position, Quaternion.LookRotation(shotSpotter()));
+                    Instantiate(bullet, shotSpot.position, Quaternion.LookRotation(otherSpotter));
                     print(hit.point);
                     FoeLife hitLife = hit.collider.GetComponent<FoeLife>();
                     if (hitLife != null)
@@ -78,17 +86,30 @@ public class BulletWorks : MonoBehaviour
                     render.SetPosition(1, aimed + (cam.transform.forward * range));
                 }
             }
+
         }
         // Reload activations
-        else if (curAmmo == 0)
+        else if (curAmmo == 0 && !reloading)
         {
             StartCoroutine(Reloader());
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && !reloading)
         {
+            StartCoroutine(Reloader());
+        }
+        if (Input.GetKeyDown(KeyCode.F) && !reloading)
+        {
+            activeSpot += 1;
+            print(activeSpot);
+            if (activeSpot > toolCount)
+            {
+                activeSpot = 1;
+            }
+            ChangeTool(invent.toolInver[activeSpot - 1]);
             StartCoroutine(Reloader());
         }
         ammoCount.text = curAmmo + " / " + maxAmmo;
+
     }
 
     private IEnumerator Reloader()
@@ -99,12 +120,6 @@ public class BulletWorks : MonoBehaviour
         reloading = false;
     }
 
-    //private IEnumerator flareGone()
-    //{
-    //    render.enabled = true;
-    //    yield return awaiten;
-    //    render.enabled = false;
-    //}
 
     public void ChangeTool(Tool equipped)
     {
@@ -116,5 +131,7 @@ public class BulletWorks : MonoBehaviour
         recoil = equipped.recoil;
         accuracy = equipped.accuracy;
         multishot = equipped.multishot;
+        toolCount = invent.toolInver.Count;
+        gunName.text = equipped.namer;
     }
 }
