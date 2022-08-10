@@ -18,8 +18,17 @@ public static class DataMage
     {
         string json = File.ReadAllText($"{Application.dataPath}/inventoryData.json");
 
-        PlayerData inventoryData = JsonUtility.FromJson<PlayerData>(json);
+        if (json == "DATANULLED")
+        {
+            PlayerData nulData = new PlayerData(GameObject.Find("Player").GetComponent<Inventory>());
+            return nulData;
+        }
+        else
+        {
+            PlayerData inventoryData = JsonUtility.FromJson<PlayerData>(json);
 
-        return inventoryData;
+            return inventoryData;
+        }
+
     }
 }

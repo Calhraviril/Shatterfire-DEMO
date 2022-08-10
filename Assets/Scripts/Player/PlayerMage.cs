@@ -16,6 +16,7 @@ public class PlayerMage : MonoBehaviour
     [Header("Statistic")]
     [SerializeField] private Image statBarLife;
     [SerializeField] private TMP_Text statTextLife;
+    [SerializeField] private TMP_Text namedBar;
     [SerializeField] private float lerpSpeed;
 
     private float current_hp; // When zero, the player dies
@@ -30,6 +31,7 @@ public class PlayerMage : MonoBehaviour
         current_hp = max_hp;
         current_ap = max_ap;
         current_mp = max_mp;
+        namedBar.text = Login.nickname;
     }
     private void Update()
     {
